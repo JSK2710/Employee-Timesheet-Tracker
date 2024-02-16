@@ -1,1 +1,44 @@
-
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timesheet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="timesheet-container">
+        <h2>Timesheet</h2>
+        <form action="/" method="post">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <label for="hours_worked">Hours Worked:</label>
+            <input type="number" id="hours_worked" name="hours_worked" min="0" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="timesheet">
+            <h3>Your Timesheet</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Hours Worked</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for date, data in timesheet.items() %}
+                        <tr>
+                            <td>{{ date }}</td>
+                            <td>{{ data.hours_worked }}</td>
+                            <td>{{ data.rating if data.rating else 'Not rated yet' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <button type="submit"><a href="/logout">Logout</a></button>
+</body>
+</html>

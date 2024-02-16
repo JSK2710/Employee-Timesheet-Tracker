@@ -1,0 +1,36 @@
+<!-- templates/manager.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="manager-container">
+        <h2>Manager</h2>
+        <div class="timesheets">
+            <h3>Employee Timesheets</h3>
+            <form action="/manager" method="post">
+                <select name="employee">
+                    {% for employee, timesheet in timesheets.items() %}
+                        <option value="{{ employee }}">{{ employee }}</option>
+                    {% endfor %}
+                </select>
+                <input type="date" name="date" required>
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <button type="submit">Rate</button>
+            </form>
+        </div>
+    </div>
+    <button type="submit"><a href="/logout">Logout</a></button>
+</body>
+</html>
