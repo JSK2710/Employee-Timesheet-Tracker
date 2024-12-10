@@ -5,20 +5,21 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = "secret_key"
 
-# Dummy data for demonstration purposes
-employees = {
-    "employee1": {"password": "password1", "manager": "manager1"},
-    "employee2": {"password": "password2", "manager": "manager1"},
-    "employee3": {"password": "password3", "manager": "manager2"},
-}
-
-managers = {
-    "manager1": {"password": "password1"},
-    "manager2": {"password": "password2"},
-}
-
+# File paths
+users_file = "users.json"
 timesheets_file = "timesheets.json"
 
+# Load user data
+try:
+    with open(users_file, "r") as f:
+        user_data = json.load(f)
+    employees = user_data["employees"]
+    managers = user_data["managers"]
+except FileNotFoundError:
+    employees = {}
+    managers = {}
+
+# Load timesheets data
 try:
     with open(timesheets_file, "r") as f:
         timesheets = json.load(f)
@@ -35,9 +36,7 @@ def login_required(role):
                     role == "manager" and session["username"] not in managers):
                 return redirect(url_for("login"))
             return fn(*args, **kwargs)
-
         return decorated_function
-
     return wrapper
 
 
@@ -75,6 +74,28 @@ def login():
     return render_template("login.html", error="")
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        role = request.form["role"]
+        manager = request.form.get("manager") if role == "employee" else None
+
+        # Add user to the appropriate group
+        if role == "employee":
+            employees[username] = {"password": password, "manager": manager}
+        elif role == "manager":
+            managers[username] = {"password": password}
+
+        # Save updated data to users.json
+        with open(users_file, "w") as f:
+            json.dump({"employees": employees, "managers": managers}, f)
+
+        return redirect(url_for("login"))
+    return render_template("register.html", managers=managers)
+
+
 @app.route("/logout")
 def logout():
     session.pop("username", None)
@@ -88,7 +109,7 @@ def manager():
         employee = request.form["employee"]
         date = request.form["date"]
         rating = int(request.form["rating"])
-        if date in timesheets[employee]:
+        if date in timesheets.get(employee, {}):
             timesheets[employee][date]["rating"] = rating
             with open(timesheets_file, "w") as f:
                 json.dump(timesheets, f)
