@@ -1,4 +1,3 @@
-<!-- templates/manager.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,28 +8,77 @@
 </head>
 <body>
     <div class="manager-container">
-        <h2>Manager</h2>
+        <h2>Manager Dashboard</h2>
         <div class="timesheets">
             <h3>Employee Timesheets</h3>
+
+            <!-- Display employee timesheets -->
+            {% for employee, employee_timesheet in timesheets.items() %}
+                <div class="employee-timesheet">
+                    <h4>Timesheet for {{ employee }}</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Hours Worked</th>
+                                <th>Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for date, entry in employee_timesheet.items() %}
+                                <tr>
+                                    <td>{{ date }}</td>
+                                    <td>{{ entry.hours_worked }}</td>
+                                    <td>
+                                        {% if entry.rating %}
+                                            {{ entry.rating }}
+                                        {% else %}
+                                            Not Rated
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+
+            <!-- Form to rate an employee's timesheet -->
+            <h3>Rate Employee Timesheet</h3>
             <form action="/manager" method="post">
-                <select name="employee">
-                    {% for employee, timesheet in timesheets.items() %}
+                <label for="employee">Select Employee</label>
+                <select name="employee" id="employee" required>
+                    {% for employee in timesheets %}
                         <option value="{{ employee }}">{{ employee }}</option>
                     {% endfor %}
                 </select>
-                <input type="date" name="date" required>
-                <label for="rating">Rating:</label>
-                <select id="rating" name="rating">
+                <br>
+                
+                <label for="date">Select Date</label>
+                <input type="date" name="date" id="date" required>
+                <br>
+                
+                <label for="rating">Rating</label>
+                <select id="rating" name="rating" required>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
+                <br>
+
                 <button type="submit">Rate</button>
             </form>
         </div>
     </div>
-    <button type="submit"><a href="/logout">Logout</a></button>
+    
+    <div class="logout-container">
+        <button class="logout-button">
+            <a href="/logout">Logout</a>
+        </button>
+    </div>
+    
+    
 </body>
 </html>
