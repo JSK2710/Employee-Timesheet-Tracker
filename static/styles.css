@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container, .register-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+form input, form select, form button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+.password-container {
+    display: flex;
+    align-items: center;
+}
+
+.password-container button {
+    margin-left: 10px;
+    padding: 5px 10px;
+}
+.logout-container {
+    position: fixed;          
+    bottom: 20px;            
+    width: 100%;              
+    text-align: center;       
+}
+
+button.logout-button {
+    background-color: #f44336;
+    color: white;             
+    border: none;             
+    padding: 10px 20px;       
+    text-align: center;       
+    text-decoration: none;   
+    font-size: 16px;        
+    border-radius: 5px;       
+    cursor: pointer;        
+    transition: background-color 0.3s ease; 
+}
+
+button.logout-button:hover {
+    background-color: #d32f2f; 
+}
+
+button.logout-button a {
+    color: white;             
+    text-decoration: none;    /
+}
+
